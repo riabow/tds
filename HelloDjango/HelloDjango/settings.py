@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ['dj.z90358fd.beget.tech']
 # Application definition
 
 INSTALLED_APPS = [
+    'tds.apps.TdsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -124,3 +125,8 @@ STATIC_ROOT = '/home/z/z90358fd/dj.z90358fd.beget.tech/public_html/static'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+try:
+    from .settings_local import *
+except:
+    pass
