@@ -1,5 +1,6 @@
 import os
-
+from django.contrib.auth import logout
+from django.contrib.auth import login
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from HelloDjango.settings import SETTINGS_PATH, TEMPLATE_DIRS
@@ -20,10 +21,13 @@ def index(request):
     return render(request, 'tds/index.html', {'dogovors':dogovors})
     # return HttpResponse("index")
 
+def logout_view(request):
+    logout(request)
+    return redirect("/")
+
 def delete_docs(request):
     models.Dogovor.objects.all().delete()
     return redirect("/")
-    #return HttpResponse("all docs deleted")
 
 def one(request):
     response = "one"
@@ -56,4 +60,3 @@ def load_docs(request):
 
     file1.close()
     return redirect("/")
-    # return HttpResponse("Done")
