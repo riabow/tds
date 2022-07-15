@@ -2,8 +2,10 @@ import os
 
 from django.http import HttpResponse
 from django.shortcuts import render
+from HelloDjango.settings import SETTINGS_PATH, TEMPLATE_DIRS
 from . import models
 # Create your views here.
+
 
 def safe_list_get (l, idx, default):
   try:
@@ -13,7 +15,9 @@ def safe_list_get (l, idx, default):
 
 
 def index(request):
-    return HttpResponse("index")
+    dogovors = models.Dogovor.objects.all()
+    return render(request, 'tds/index.html', {'dogovors':dogovors})
+    # return HttpResponse("index")
 
 def one(request):
     response = "one"
