@@ -1,6 +1,11 @@
 from django.db import models
 
-# Create your models here.
+class My_settings (models.Model ):
+    setname = models.CharField(max_length=25, default='', blank=False)
+    value = models.CharField(max_length=255, default='', blank=True)
+    descr = models.CharField(max_length=255, default='', blank=True)
+
+
 class Dogovor (models.Model):
     dog_id = models.CharField(max_length=10, default='', blank=True)
     CONTR_NUM = models.CharField(max_length=10, default='', blank=True)
@@ -21,9 +26,10 @@ class Dogovor (models.Model):
     Sys_pass = models.CharField(max_length=10, default='', blank=True)
     Lock_pass = models.CharField(max_length=10, default='', blank=True)
     Tbv = models.CharField(max_length=10, default='', blank=True)
+    Tbv2 = models.CharField(max_length=10, default='', blank=True)
     TZ = models.CharField(max_length=10, default='', blank=True)
     From_to = models.CharField(max_length=100, default='', blank=True)
-    No_serv = models.CharField(max_length=100, default='', blank=True)
+    No_serv = models.CharField(max_length=500, default='', blank=True)
     Manager = models.CharField(max_length=150, default='', blank=True)
     Kv_count = models.CharField(max_length=10, default='', blank=True)
     org = models.CharField(max_length=50, default='', blank=True)

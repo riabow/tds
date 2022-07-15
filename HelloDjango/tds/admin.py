@@ -1,7 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
 
 from .models import Dogovor
+from .models import My_settings
 
 admin.site.register(Dogovor)
+admin.site.register(My_settings)

@@ -5,6 +5,7 @@
   <title>TITLE</title>
 </head>
 <body>
+{% include 'tds/navbar.html' %}
 <h1>
     BODY
 </h1>
@@ -13,6 +14,7 @@
     <table border="1">
     <tr><td>id</td><td>CONTR_NUM</td><td>UL</td><td>DOM</td><td>KORPUS</td><td>PODEZD</td></tr>
 {% for dogovor in dogovors.all %}
+
         <tr><td><a href="/admin/tds/dogovor/{{dogovor.id}}/change/"/> {{ dogovor.dog_id }}</a> </td><td>{{ dogovor.CONTR_NUM }}</td><td>{{ dogovor.UL }} </td><td>{{ dogovor.DOM }} </td><td>{{ dogovor.KORPUS }} </td><td>{{ dogovor.PODEZD }}</td></tr>
 {% endfor %}
     </table>
