@@ -22,7 +22,8 @@ def index(request):
 
 def delete_docs(request):
     models.Dogovor.objects.all().delete()
-    return HttpResponse("all docs deleted")
+    return redirect("/")
+    #return HttpResponse("all docs deleted")
 
 def one(request):
     response = "one"
@@ -47,8 +48,6 @@ def load_docs(request):
             n += 1
             if f.name == 'id':
                 continue
-            #if n == 18:
-            #    continue
             curVal = safe_list_get(l, n, "")
             if curVal == 'NULL':
                 curVal = ''

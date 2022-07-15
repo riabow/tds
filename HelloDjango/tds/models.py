@@ -5,6 +5,8 @@ class My_settings (models.Model ):
     value = models.CharField(max_length=255, default='', blank=True)
     descr = models.CharField(max_length=255, default='', blank=True)
 
+    def __str__(self):
+        return f"{self.setname} = {self.value} , #{self.descr}"
 
 class Dogovor (models.Model):
     dog_id = models.CharField(max_length=10, default='', blank=True)
@@ -36,6 +38,8 @@ class Dogovor (models.Model):
     spetsobslug = models.CharField(max_length=150, default='', blank=True)
     kod_open_close = models.CharField(max_length=100, default='', blank=True)
 
+    def __str__(self):
+        return f'{self.CONTR_NUM}, {self.UL}, {self.DOM}к{self.KORPUS},п{self.PODEZD} # {self.kod_open_close} '
 
 '''
     [Key_num] [nvarchar](8) NULL,
