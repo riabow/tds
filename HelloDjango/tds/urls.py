@@ -6,6 +6,7 @@ urlpatterns = [
     path('', views.index),
     path('one/', views.one),
     path('load_docs/', views.load_docs),
+    path('show_table/', views.show_table),
     path('delete_docs/', views.delete_docs),
     path('logout_view/', views.logout_view),
 ]

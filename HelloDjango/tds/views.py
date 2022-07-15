@@ -1,11 +1,15 @@
 import os
 from django.contrib.auth import logout
+from django.db.models import Q
 from django.contrib.auth import login
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from HelloDjango.settings import SETTINGS_PATH, TEMPLATE_DIRS
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.views.generic import TemplateView
 from . import models
-# Create your views here.
 
 
 def safe_list_get (l, idx, default):
@@ -14,26 +18,57 @@ def safe_list_get (l, idx, default):
   except IndexError:
     return default
 
+decorators = [ login_required]
+
 
 def index(request):
-    dogovors = models.Dogovor.objects.all()[:100]
-
-    return render(request, 'tds/index.html', {'dogovors':dogovors})
+    return render(request, 'tds/index.html')
     # return HttpResponse("index")
+
+def show_table(request):
+    if not request.user.is_authenticated:
+        return redirect("/admin/login/?next=/show_table/")
+    q = models.Dogovor.objects.all()
+    if 'id' in request.GET and request.GET['id'] != '':
+        q = q.filter(dog_id__iexact=request.GET['id'])
+    if 'CONTR_NUM' in request.GET and request.GET['CONTR_NUM'] != '':
+        q = q.filter(CONTR_NUM__startswith=request.GET['CONTR_NUM'])
+    if 'UL' in request.GET and request.GET['UL'] != '':
+        q = q.filter(UL__startswith=request.GET['UL'])
+    if 'DOM' in request.GET and request.GET['DOM'] != '':
+        q = q.filter(DOM__startswith=request.GET['DOM'])
+    if 'KORPUS' in request.GET and request.GET['KORPUS'] != '':
+        q = q.filter(KORPUS__startswith=request.GET['KORPUS'])
+    if 'PODEZD' in request.GET and request.GET['PODEZD'] != '':
+        q = q.filter(PODEZD__startswith=request.GET['PODEZD'])
+
+    dogovors = q[:100]
+
+    return render(request, 'tds/table.html', {'dogovors': dogovors,
+                                              'request': request,
+                                              'RGET':request.GET})
 
 def logout_view(request):
     logout(request)
     return redirect("/")
 
 def delete_docs(request):
-    models.Dogovor.objects.all().delete()
+    if not request.user.is_authenticated:
+        return redirect("/admin/login/?next=/delete_docs/")
+
+    #models.Dogovor.objects.all().delete()
     return redirect("/")
 
 def one(request):
+    if not request.user.is_authenticated:
+        return redirect("/admin/login/?next=/one/")
     response = "one"
     return HttpResponse(response)
 
 def load_docs(request):
+    if not request.user.is_authenticated:
+        return redirect("/admin/login/?next=/load_docs/")
+
     # Using readline()
     file1 = open(os.path.dirname(__file__) + '/../dogovor.csv', 'r', encoding='utf-16')
     count = 0

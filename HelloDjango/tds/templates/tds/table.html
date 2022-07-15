@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TITLE</title>
+</head>
+<body>
+{% include 'tds/navbar.html' %}
+<h1>
+    BODY
+</h1>
+
+<ul>
+    <table border="1">
+        <form action="/show_table" method="get">
+
+    <tr><td>id</td><td>CONTR_NUM</td><td>UL</td><td>DOM</td><td>KORPUS</td><td>PODEZD</td><td>KOD_OPEN_CLOSE</td></tr>
+    <tr><td><input type="text" id="id" name="id" value="{{RGET.id}}"></td>
+        <td><input type="text" id="CONTR_NUM" name="CONTR_NUM" value="{{RGET.CONTR_NUM}}"></td>
+        <td><input type="text" id="UL" name="UL" value="{{RGET.UL}}"></td>
+        <td><input type="text" id="DOM" name="DOM" value="{{RGET.DOM}}"></td>
+        <td><input type="text" id="KORPUS" name="KORPUS" value="{{RGET.KORPUS}}"></td>
+        <td><input type="text" id="PODEZD" name="PODEZD" value="{{RGET.PODEZD}}"></td>
+        <td><input type="submit" value="Фильтровать"></td>
+        <td>KOD_OPEN_CLOSE</td>
+
+    </tr>
+        </form>
+{% for dogovor in dogovors.all %}
+
+        <tr><td><a href="/admin/tds/dogovor/{{dogovor.id}}/change/"/> {{ dogovor.dog_id }}</a> </td><td>{{ dogovor.CONTR_NUM }}</td><td>{{ dogovor.UL }} </td><td>{{ dogovor.DOM }} </td><td>{{ dogovor.KORPUS }} </td><td>{{ dogovor.PODEZD }}</td><td>{{dogovor.kod_open_close}}<td></td>
+
+{% endfor %}
+    </table>
+</ul>
+
+</body>
+</html>

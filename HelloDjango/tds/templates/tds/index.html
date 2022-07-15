@@ -7,19 +7,8 @@
 <body>
 {% include 'tds/navbar.html' %}
 <h1>
-    BODY
+    Тодес доовора
 </h1>
-
-<ul>
-    <table border="1">
-    <tr><td>id</td><td>CONTR_NUM</td><td>UL</td><td>DOM</td><td>KORPUS</td><td>PODEZD</td><td>KOD_OPEN_CLOSE</td></tr>
-{% for dogovor in dogovors.all %}
-
-        <tr><td><a href="/admin/tds/dogovor/{{dogovor.id}}/change/"/> {{ dogovor.dog_id }}</a> </td><td>{{ dogovor.CONTR_NUM }}</td><td>{{ dogovor.UL }} </td><td>{{ dogovor.DOM }} </td><td>{{ dogovor.KORPUS }} </td><td>{{ dogovor.PODEZD }}</td><td>{{dogovor.kod_open_close}}<td></td>
-
-{% endfor %}
-    </table>
-</ul>
 
 </body>
 </html>
