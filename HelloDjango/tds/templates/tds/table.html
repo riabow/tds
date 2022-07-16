@@ -7,32 +7,82 @@
 <body>
 {% include 'tds/navbar.html' %}
 <h1>
-    BODY
+    ДОГОВОРА {{cmd_string}}
 </h1>
-
+<a href="/cmdstrind.txt" target="_blank" >cmdstrind.txt</a>
 <ul>
     <table border="1">
         <form action="/show_table" method="get">
 
-    <tr><td>id</td><td>CONTR_NUM</td><td>UL</td><td>DOM</td><td>KORPUS</td><td>PODEZD</td><td>KOD_OPEN_CLOSE</td></tr>
+    <tr><td>id</td><td>CONTR_NUM</td><td>UL</td><td>DOM</td><td>KORPUS</td><td>PODEZD</td><td>KOD_OPEN_CLOSE</td><td>COMMAND</td></tr>
     <tr><td><input type="text" id="id" name="id" value="{{RGET.id}}"></td>
         <td><input type="text" id="CONTR_NUM" name="CONTR_NUM" value="{{RGET.CONTR_NUM}}"></td>
         <td><input type="text" id="UL" name="UL" value="{{RGET.UL}}"></td>
         <td><input type="text" id="DOM" name="DOM" value="{{RGET.DOM}}"></td>
         <td><input type="text" id="KORPUS" name="KORPUS" value="{{RGET.KORPUS}}"></td>
         <td><input type="text" id="PODEZD" name="PODEZD" value="{{RGET.PODEZD}}"></td>
+        <td><input type="text" id="KOD_OPEN_CLOSE" name="KOD_OPEN_CLOSE" value="{{RGET.KOD_OPEN_CLOSE}}"></td>
         <td><input type="submit" value="Фильтровать"></td>
-        <td>KOD_OPEN_CLOSE</td>
+        <td></td>
 
     </tr>
         </form>
 {% for dogovor in dogovors.all %}
 
-        <tr><td><a href="/admin/tds/dogovor/{{dogovor.id}}/change/"/> {{ dogovor.dog_id }}</a> </td><td>{{ dogovor.CONTR_NUM }}</td><td>{{ dogovor.UL }} </td><td>{{ dogovor.DOM }} </td><td>{{ dogovor.KORPUS }} </td><td>{{ dogovor.PODEZD }}</td><td>{{dogovor.kod_open_close}}<td></td>
+        <tr>
+            <td><a href="/admin/tds/dogovor/{{dogovor.id}}/change/" target="_blank"/> {{ dogovor.dog_id }}</a> </td>
+            <td>{{ dogovor.CONTR_NUM }}</td>
+            <td>{{ dogovor.UL }} </td>
+            <td>{{ dogovor.DOM }} </td>
+            <td>{{ dogovor.KORPUS }} </td>
+            <td>{{ dogovor.PODEZD }}</td>
+            <td>{{dogovor.kod_open_close}}</td>
 
+              <td>
+                  <select
+                  {% if dogovor.kod_open_close == ''%}
+                    disabled
+                  {% endif %}
+
+                {% if dogovor.command == 'o' %}
+                  style="background-color: red "
+                {% elif dogovor.command == 'c' %}
+                  style="background-color: green "
+                {% else %}
+                  style="background-color: white "
+                {% endif %}
+
+                          id="command_{{dogovor.id}}" onchange="Command_oncange({{dogovor.id}})">
+                      <option value='-' {% if dogovor.command == ''%}selected{% endif %} ></option>
+                      <option value='o' style="background-color: red "  {% if dogovor.command == 'o'%}selected{% endif %} >открыть</option>
+                      <option value='c' style="background-color: green " {% if dogovor.command == 'c'%}selected{% endif %} >закрыть</option>
+                  </select>
+
+              </td>
+        </tr>
 {% endfor %}
     </table>
 </ul>
 
 </body>
+<script>
+ async function Command_oncange(id){
+    var cmd = document.getElementById("command_"+id).value;
+    url =  "/setcommand/"+id+"/"+cmd+"/"
+    console.log(url)
+
+    const response = await fetch(url, {
+       method: 'GET',
+
+    });
+
+    response.json().then(data => {
+    console.log(data);
+    location.reload()
+});
+
+}
+
+
+</script>
 </html>

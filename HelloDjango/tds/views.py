@@ -3,6 +3,7 @@ from django.contrib.auth import logout
 from django.db.models import Q
 from django.contrib.auth import login
 from django.http import HttpResponse
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from HelloDjango.settings import SETTINGS_PATH, TEMPLATE_DIRS
 from django.contrib.auth.decorators import login_required
@@ -25,6 +26,34 @@ def index(request):
     return render(request, 'tds/index.html')
     # return HttpResponse("index")
 
+
+def cmd_string():
+    q = models.Dogovor.objects.all()
+    q = q.filter(~Q(command=''))
+    ret = ''
+    for d in q:
+        ret += f' {d.command}{d.kod_open_close}'
+    return ret
+
+def cmdstrind(request):
+    ret = cmd_string()
+    return HttpResponse(ret)
+
+def setcommand(request, id, cmd):
+    print(request)
+    if not request.user.is_authenticated:
+        return JsonResponse({'resp': f"No login"})
+    d = models.Dogovor.objects.get(pk=id)
+    if d:
+        if cmd == '-':
+            cmd = ''
+        d.command = cmd
+        d.save()
+        return JsonResponse({'resp': f"OK {id} / {cmd} "})
+    else:
+        return JsonResponse({'resp': f"not found {id}  "})
+
+
 def show_table(request):
     if not request.user.is_authenticated:
         return redirect("/admin/login/?next=/show_table/")
@@ -41,12 +70,16 @@ def show_table(request):
         q = q.filter(KORPUS__startswith=request.GET['KORPUS'])
     if 'PODEZD' in request.GET and request.GET['PODEZD'] != '':
         q = q.filter(PODEZD__startswith=request.GET['PODEZD'])
+    if 'KOD_OPEN_CLOSE' in request.GET and request.GET['KOD_OPEN_CLOSE'] != '':
+        q = q.filter(kod_open_close__iexact=request.GET['KOD_OPEN_CLOSE'])
 
     dogovors = q[:100]
-
+    c = cmd_string()
     return render(request, 'tds/table.html', {'dogovors': dogovors,
                                               'request': request,
-                                              'RGET':request.GET})
+                                              'RGET':request.GET,
+                                              'cmd_string':c,
+                                              })
 
 def logout_view(request):
     logout(request)
