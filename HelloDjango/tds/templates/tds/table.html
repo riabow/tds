@@ -10,23 +10,38 @@
     ДОГОВОРА {{cmd_string}}
 </h1>
 <a href="/cmdstrind.txt" target="_blank" >cmdstrind.txt</a>
-<ul>
-    <table border="1">
-        <form action="/show_table" method="get">
 
-    <tr><td>id</td><td>CONTR_NUM</td><td>UL</td><td>DOM</td><td>KORPUS</td><td>PODEZD</td><td>KOD_OPEN_CLOSE</td><td>COMMAND</td></tr>
-    <tr><td><input type="text" id="id" name="id" value="{{RGET.id}}"></td>
-        <td><input type="text" id="CONTR_NUM" name="CONTR_NUM" value="{{RGET.CONTR_NUM}}"></td>
-        <td><input type="text" id="UL" name="UL" value="{{RGET.UL}}"></td>
-        <td><input type="text" id="DOM" name="DOM" value="{{RGET.DOM}}"></td>
-        <td><input type="text" id="KORPUS" name="KORPUS" value="{{RGET.KORPUS}}"></td>
-        <td><input type="text" id="PODEZD" name="PODEZD" value="{{RGET.PODEZD}}"></td>
-        <td><input type="text" id="KOD_OPEN_CLOSE" name="KOD_OPEN_CLOSE" value="{{RGET.KOD_OPEN_CLOSE}}"></td>
+<div class="table-responsive">
+    <table border="1" class="table table-striped" style="width: 100%;" >
+
+    <thead>
+    <tr>
+        <th >id</th>
+        <th >CONTR_NUM</th>
+        <th style="width:100%">UL</th>
+        <th >DOM</th>
+        <th >KORPUS</th>
+        <th >PODEZD</th>
+        <th >KOD_OPEN_CLOSE</th>
+        <th >COMMAND</th>
+    </tr>
+    </thead>
+   <tbody>
+
+        <form action="/show_table" method="get">
+      <tr>
+        <td><input type="text" size="4" id="id" name="id" value="{{RGET.id}}"></td>
+        <td><input type="text" size="10" id="CONTR_NUM" name="CONTR_NUM" value="{{RGET.CONTR_NUM}}"></td>
+        <td><input type="text" size="70" id="UL" name="UL" value="{{RGET.UL}}"></td>
+        <td><input type="text" size="2" id="DOM" name="DOM" value="{{RGET.DOM}}"></td>
+        <td><input type="text" size="2" id="KORPUS" name="KORPUS" value="{{RGET.KORPUS}}"></td>
+        <td><input type="text" size="2" id="PODEZD" name="PODEZD" value="{{RGET.PODEZD}}"></td>
+        <td><input type="text" size="10" id="KOD_OPEN_CLOSE" name="KOD_OPEN_CLOSE" value="{{RGET.KOD_OPEN_CLOSE}}"></td>
         <td><input type="submit" value="Фильтровать"></td>
         <td></td>
-
-    </tr>
+      </tr>
         </form>
+
 {% for dogovor in dogovors.all %}
 
         <tr>
@@ -61,8 +76,10 @@
               </td>
         </tr>
 {% endfor %}
+    </tbody>
     </table>
-</ul>
+</div>
+
 
 </body>
 <script>
