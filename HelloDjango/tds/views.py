@@ -11,6 +11,9 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 from . import models
+from django.views.decorators.csrf import csrf_exempt
+
+POSTED_RESPONSES = []
 
 
 def safe_list_get (l, idx, default):
@@ -26,6 +29,12 @@ def index(request):
     return render(request, 'tds/index.html')
     # return HttpResponse("index")
 
+@csrf_exempt
+def post_resp(request):
+    print("reuest:", request.POST)
+    if len(request.POST) > 0 :
+        POSTED_RESPONSES.insert(0, request.POST)
+    return JsonResponse({'POSTED_RESPONSES': POSTED_RESPONSES})
 
 def cmd_string():
     q = models.Dogovor.objects.all()

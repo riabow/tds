@@ -11,4 +11,5 @@ urlpatterns = [
     path('logout_view/', views.logout_view),
     path('setcommand/<int:id>/<str:cmd>/', views.setcommand),
     path('cmdstrind.txt', views.cmdstrind),
+    path('post_resp/', views.post_resp),
 ]
