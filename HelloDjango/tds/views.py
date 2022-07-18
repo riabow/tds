@@ -33,7 +33,8 @@ def index(request):
 def post_resp(request):
     print("reuest:", request.POST)
     if len(request.POST) > 0 :
-        POSTED_RESPONSES.insert(0, request.POST)
+        POSTED_RESPONSES.insert(0, {'id': len(POSTED_RESPONSES),
+                                    'you_posted': request.POST})
     return JsonResponse({'POSTED_RESPONSES': POSTED_RESPONSES})
 
 def cmd_string():
