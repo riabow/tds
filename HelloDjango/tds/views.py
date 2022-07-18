@@ -65,17 +65,25 @@ def setcommand(request, id, cmd):
     else:
         return JsonResponse({'resp': f"not found {id}  "})
 
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
 
 def show_table(request):
     if not request.user.is_authenticated:
         return redirect("/admin/login/?next=/show_table/")
+    print("IP: ", get_client_ip(request))
     q = models.Dogovor.objects.all()
     if 'id' in request.GET and request.GET['id'] != '':
         q = q.filter(dog_id__iexact=request.GET['id'])
     if 'CONTR_NUM' in request.GET and request.GET['CONTR_NUM'] != '':
-        q = q.filter(CONTR_NUM__startswith=request.GET['CONTR_NUM'])
+        q = q.filter(CONTR_NUM__contains=request.GET['CONTR_NUM'])
     if 'UL' in request.GET and request.GET['UL'] != '':
-        q = q.filter(UL__startswith=request.GET['UL'])
+        q = q.filter(UL__contains=request.GET['UL'])
     if 'DOM' in request.GET and request.GET['DOM'] != '':
         q = q.filter(DOM__startswith=request.GET['DOM'])
     if 'KORPUS' in request.GET and request.GET['KORPUS'] != '':
