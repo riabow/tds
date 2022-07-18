@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load static %}
 <head>
   <meta charset="UTF-8">
   <title>TITLE</title>
@@ -103,5 +104,8 @@
 
 </script>
 {% include 'tds/bottom.html' %}
+
+<script src="{% static '/tds/js/t.js' %}"></script>
+<script src="{% static '/tds/js/bootstrap.bundle.min.js' %}"></script>
 
 </html>

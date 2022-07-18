@@ -26,6 +26,8 @@ decorators = [ login_required]
 
 
 def index(request):
+    if not request.user.is_authenticated:
+        return redirect("/admin/login/?next=/show_table/")
     return render(request, 'tds/index.html')
     # return HttpResponse("index")
 

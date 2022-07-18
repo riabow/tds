@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load static %}
 <head>
   <meta charset="UTF-8">
   <title>TITLE</title>
 </head>
+
 <body>
 {% include 'tds/navbar.html' %}
 <h1>
@@ -12,5 +14,10 @@
 
 </body>
 {% include 'tds/bottom.html' %}
+
+<script src="{% static '/tds/js/t.js' %}"></script>
+<script src="{% static '/tds/js/bootstrap.bundle.min.js' %}"></script>
+
+
 
 </html>
