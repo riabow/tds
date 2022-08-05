@@ -62,7 +62,10 @@ def ispolnenie(request, kod, sost):
         return JsonResponse({'resp': f"NOT FOUND {kod} / {sost} "})
         print(kod, "not found")
     if len(dogs) > 1:
-        return JsonResponse({'resp': f"to many  FOUND {kod} / {sost} "})
+        dogs[0].result = sost
+        dogs[0].command = ''
+        dogs[0].save()
+        return JsonResponse({'resp': f"to many  FOUND {kod} I got first"})
         print(kod, "to many found")
 
 
