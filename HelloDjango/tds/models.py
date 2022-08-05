@@ -38,6 +38,7 @@ class Dogovor (models.Model):
     spetsobslug = models.CharField(max_length=150, default='', blank=True)
     kod_open_close = models.CharField(max_length=100, default='', blank=True)
     command = models.CharField(max_length=1, default='', blank=True)
+    result = models.CharField(max_length=100, default='', blank=True)
 
     def __str__(self):
         return f'{self.CONTR_NUM}, {self.UL}, {self.DOM}к{self.KORPUS},п{self.PODEZD} # {self.kod_open_close} '

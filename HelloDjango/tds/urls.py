@@ -10,6 +10,7 @@ urlpatterns = [
     path('delete_docs/', views.delete_docs),
     path('logout_view/', views.logout_view),
     path('setcommand/<int:id>/<str:cmd>/', views.setcommand),
+    path('ispolnenie/<str:kod>/<str:sost>/', views.ispolnenie),
     path('cmdstrind.txt', views.cmdstrind),
     path('post_resp/', views.post_resp),
 ]

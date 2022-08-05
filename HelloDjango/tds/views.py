@@ -51,6 +51,21 @@ def cmdstrind(request):
     ret = cmd_string()
     return HttpResponse(ret)
 
+def ispolnenie(request, kod, sost):
+    dogs = models.Dogovor.objects.filter(kod_open_close=kod)
+    if len(dogs) == 1:
+        dogs[0].result = sost
+        dogs[0].command = ''
+        dogs[0].save()
+        return JsonResponse({'resp': f"OK {kod} / {sost} "})
+    if len(dogs) == 0:
+        return JsonResponse({'resp': f"NOT FOUND {kod} / {sost} "})
+        print(kod, "not found")
+    if len(dogs) > 1:
+        return JsonResponse({'resp': f"to many  FOUND {kod} / {sost} "})
+        print(kod, "to many found")
+
+
 def setcommand(request, id, cmd):
     print(request)
     if not request.user.is_authenticated:
