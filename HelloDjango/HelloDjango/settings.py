@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     "debug_toolbar",
 ]
 
+
 MIDDLEWARE = [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
 
@@ -42,7 +43,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
 INTERNAL_IPS = [
     "127.0.0.1",
     "0.0.0.0",
