@@ -5,7 +5,15 @@
   <meta charset="UTF-8">
   <title>TITLE</title>
 </head>
-<body>
+
+<body onLoad="timeRefresh(20000);">
+    <script>
+      function timeRefresh(time) {
+        setTimeout("location.reload(true);", time);
+      }
+    </script>
+
+
 {% include 'tds/navbar.html' %}
 <h1>
     ДОГОВОРА {{cmd_string}}
@@ -30,11 +38,11 @@
     </thead>
    <tbody>
 
-        <form action="/show_table" method="get">
+        <form id="filterform" action="/show_table" method="get">
       <tr>
         <td><input type="text" size="4" id="id" name="id" value="{{RGET.id}}"></td>
-        <td><input type="text" size="10" id="CONTR_NUM" name="CONTR_NUM" value="{{RGET.CONTR_NUM}}"></td>
-        <td><input type="text" size="70" id="UL" name="UL" value="{{RGET.UL}}"></td>
+        <td><input type="text" size="5" id="CONTR_NUM" name="CONTR_NUM" value="{{RGET.CONTR_NUM}}"></td>
+        <td><input type="text" size="20" id="UL" name="UL" value="{{RGET.UL}}"></td>
         <td><input type="text" size="2" id="DOM" name="DOM" value="{{RGET.DOM}}"></td>
         <td><input type="text" size="2" id="KORPUS" name="KORPUS" value="{{RGET.KORPUS}}"></td>
         <td><input type="text" size="2" id="PODEZD" name="PODEZD" value="{{RGET.PODEZD}}"></td>
@@ -50,9 +58,9 @@
         <tr>
             <td><a href="/admin/tds/dogovor/{{dogovor.id}}/change/" target="_blank"/> {{ dogovor.dog_id }}</a> </td>
             <td>{{ dogovor.CONTR_NUM }}</td>
-            <td>{{ dogovor.UL }} </td>
-            <td>{{ dogovor.DOM }} </td>
-            <td>{{ dogovor.KORPUS }} </td>
+            <td onclick="on_line_ckick('UL', '{{dogovor.UL}}' )" >{{ dogovor.UL }} </td>
+            <td onclick="on_line_ckick('DOM', '{{dogovor.DOM}}' )" >{{ dogovor.DOM }} </td>
+            <td onclick="on_line_ckick('KORPUS', '{{dogovor.KORPUS}}' )">{{ dogovor.KORPUS }} </td>
             <td>{{ dogovor.PODEZD }}</td>
             <td>{{dogovor.kod_open_close}}</td>
 
@@ -86,6 +94,17 @@
 
 
 </body>
+
+<script>
+function on_line_ckick(el, val){
+    console.log(el, val)
+    document.getElementById(el).value=val
+    document.forms[0].submit()
+
+}
+
+</script>
+
 <script>
  async function Command_oncange(id){
     var cmd = document.getElementById("command_"+id).value;
@@ -107,6 +126,10 @@
 
 </script>
 {% include 'tds/bottom.html' %}
+
+<script>
+
+</script>
 
 <script src="{% static '/tds/js/t.js' %}"></script>
 <script src="{% static '/tds/js/bootstrap.bundle.min.js' %}"></script>
