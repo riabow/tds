@@ -39,8 +39,7 @@ def post_get_status(request):
     ret = {}
     for i in ids:
         ret[i.pk] = i.result
-
-    return JsonResponse({'ret': ret, 'ask': js['list_id'] })
+    return JsonResponse({'ret': ret })
 
 @csrf_exempt
 def post_resp(request):

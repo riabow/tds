@@ -6,19 +6,11 @@
   <title>TITLE</title>
 </head>
 
-<body onload="setInterval(timeRefresh, 1000);">
-<script>
-function timeRefresh1(){
-    console.log('ref-resh')
-}
-</script>
+<body onload="setInterval(timeRefresh, 10000);">
 
 <script>
 function timeRefresh() {
-    console.log('refresh')
-    // setTimeout("location.reload(true);", time);
     list_id = {{ list_id }};
-
     postData('/post_get_status/', {'list_id': list_id} )
         .then((data) => {
             ret = data['ret'];
@@ -29,7 +21,6 @@ function timeRefresh() {
 };
 
 async function postData(url = '', data = {}) {
-  // Default options are marked with *
   const response = await fetch(url, {
     method: 'POST', // *GET, POST, PUT, DELETE, etc.
     mode: 'cors', // no-cors, *cors, same-origin
@@ -37,7 +28,6 @@ async function postData(url = '', data = {}) {
     credentials: 'same-origin', // include, *same-origin, omit
     headers: {
       'Content-Type': 'application/json'
-      // 'Content-Type': 'application/x-www-form-urlencoded',
     },
     redirect: 'follow', // manual, *follow, error
     referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
@@ -45,14 +35,7 @@ async function postData(url = '', data = {}) {
   });
   return response.json(); // parses JSON response into native JavaScript objects
 }
-
-
-
-
-
-
     </script>
-
 
 {% include 'tds/navbar.html' %}
 <h1>
@@ -125,7 +108,7 @@ async function postData(url = '', data = {}) {
                   </select>
 
               </td>
-            <td><div id="res{{dogovor.id}}"></div></td>
+            <td><div id="res{{dogovor.id}}">{{dogovor.result}}</div></td>
         </tr>
 {% endfor %}
     </tbody>
