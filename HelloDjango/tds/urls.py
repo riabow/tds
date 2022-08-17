@@ -13,4 +13,5 @@ urlpatterns = [
     path('ispolnenie/<str:kod>/<str:sost>/', views.ispolnenie),
     path('cmdstrind.txt', views.cmdstrind),
     path('post_resp/', views.post_resp),
+    path('post_get_status/', views.post_get_status),
 ]

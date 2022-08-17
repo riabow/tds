@@ -1,3 +1,4 @@
+import json
 import os
 from django.contrib.auth import logout
 from django.db.models import Q
@@ -30,6 +31,16 @@ def index(request):
         return redirect("/admin/login/?next=/show_table/")
     return render(request, 'tds/index.html')
     # return HttpResponse("index")
+
+@csrf_exempt
+def post_get_status(request):
+    js = json.loads(request.body)
+    ids = models.Dogovor.objects.filter(pk__in=js['list_id'])
+    ret = {}
+    for i in ids:
+        ret[i.pk] = i.result
+
+    return JsonResponse({'ret': ret, 'ask': js['list_id'] })
 
 @csrf_exempt
 def post_resp(request):
@@ -91,6 +102,7 @@ def get_client_ip(request):
         ip = request.META.get('REMOTE_ADDR')
     return ip
 
+
 def show_table(request):
     if not request.user.is_authenticated:
         return redirect("/admin/login/?next=/show_table/")
@@ -112,11 +124,16 @@ def show_table(request):
         q = q.filter(kod_open_close__iexact=request.GET['KOD_OPEN_CLOSE'])
 
     dogovors = q[:100]
+    list_id = []
+    for dog in dogovors:
+        list_id.append(int(dog.pk))
+
     c = cmd_string()
     return render(request, 'tds/table.html', {'dogovors': dogovors,
                                               'request': request,
                                               'RGET':request.GET,
                                               'cmd_string':c,
+                                              'list_id':list_id
                                               })
 
 def logout_view(request):
