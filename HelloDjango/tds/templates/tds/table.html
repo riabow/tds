@@ -15,7 +15,18 @@ function timeRefresh() {
         .then((data) => {
             ret = data['ret'];
             for (const key in ret) {
-                document.getElementById("res"+key).innerHTML=ret[key];
+                document.getElementById("res"+key).innerHTML=ret[key]['r'];
+                var UserOption  =  document.getElementById("command_"+key)
+                UserOption.value= ret[key]['c']
+                if (ret[key]['c']=='o'){
+                    UserOption.style="background-color: red "
+                }
+                else if (ret[key]['c']=='c'){
+                    UserOption.style="background-color: green "
+                }
+                else {
+                    UserOption.style="background-color: white "
+                }
             }
     });
 };

@@ -38,8 +38,8 @@ def post_get_status(request):
     ids = models.Dogovor.objects.filter(pk__in=js['list_id'])
     ret = {}
     for i in ids:
-        ret[i.pk] = i.result
-    return JsonResponse({'ret': ret })
+        ret[i.pk] = {'r':i.result, 'c': i.command}
+    return JsonResponse({'ret': ret})
 
 @csrf_exempt
 def post_resp(request):
