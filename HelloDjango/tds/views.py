@@ -1,3 +1,4 @@
+import datetime
 import json
 import os
 from django.contrib.auth import logout
@@ -38,7 +39,8 @@ def post_get_status(request):
     ids = models.Dogovor.objects.filter(pk__in=js['list_id'])
     ret = {}
     for i in ids:
-        ret[i.pk] = {'r':i.result, 'c': i.command}
+        t = datetime.datetime.now() - datetime.datetime(i.last_change.year, i.last_change.month, i.last_change.day, i.last_change.hour, i.last_change.minute, i.last_change.second)
+        ret[i.pk] = {'r':i.result, 'c': i.command, 't': round(t.total_seconds())}
     return JsonResponse({'ret': ret})
 
 @csrf_exempt
@@ -62,10 +64,12 @@ def cmdstrind(request):
     return HttpResponse(ret)
 
 def ispolnenie(request, kod, sost):
+    """ path('ispolnenie/<str:kod>/<str:sost>/', views.ispolnenie) """
     dogs = models.Dogovor.objects.filter(kod_open_close=kod)
     if len(dogs) == 1:
         dogs[0].result = sost
         dogs[0].command = ''
+        dogs[0].last_change = datetime.datetime.now()
         dogs[0].save()
         return JsonResponse({'resp': f"OK {kod} / {sost} "})
     if len(dogs) == 0:
@@ -74,6 +78,7 @@ def ispolnenie(request, kod, sost):
     if len(dogs) > 1:
         dogs[0].result = sost
         dogs[0].command = ''
+        dogs[0].last_change = datetime.datetime.now()
         dogs[0].save()
         return JsonResponse({'resp': f"to many  FOUND {kod} I got first"})
         print(kod, "to many found")

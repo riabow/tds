@@ -15,7 +15,19 @@ function timeRefresh() {
         .then((data) => {
             ret = data['ret'];
             for (const key in ret) {
-                document.getElementById("res"+key).innerHTML=ret[key]['r'];
+                var result = document.getElementById("res"+key)
+                if (ret[key]['r'] == '' ){
+                    result.innerHTML = "."
+                }else {
+                    result.innerHTML = ret[key]['r']
+                }
+                if         (ret[key]['t'] < 60 )   { result.style = "background-color: #99ff99 ";
+                } else if  (ret[key]['t'] < 60*5 ) { result.style = "background-color: #ffff99 ";
+                } else if  (ret[key]['t'] < 60*10 ){ result.style = "background-color: #ff9999 ";
+                } else                             { result.style = "background-color: #cccccc ";
+
+                }
+
                 var UserOption  =  document.getElementById("command_"+key)
                 UserOption.value= ret[key]['c']
                 if (ret[key]['c']=='o'){
@@ -162,7 +174,7 @@ function on_line_ckick(el, val){
 {% include 'tds/bottom.html' %}
 
 <script>
-
+timeRefresh();
 </script>
 
 <script src="{% static '/tds/js/t.js' %}"></script>
