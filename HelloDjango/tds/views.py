@@ -17,6 +17,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 POSTED_RESPONSES = []
 
+LAST_REQUESTS = {}
 
 def safe_list_get (l, idx, default):
   try:
@@ -33,18 +34,10 @@ def index(request):
     return render(request, 'tds/index.html')
     # return HttpResponse("index")
 
-@csrf_exempt
-def post_get_status(request):
-    js = json.loads(request.body)
-    ids = models.Dogovor.objects.filter(pk__in=js['list_id'])
-    ret = {}
-    for i in ids:
-        t = datetime.datetime.now() - datetime.datetime(i.last_change.year, i.last_change.month, i.last_change.day, i.last_change.hour, i.last_change.minute, i.last_change.second)
-        ret[i.pk] = {'r':i.result, 'c': i.command, 't': round(t.total_seconds())}
-    return JsonResponse({'ret': ret})
 
 @csrf_exempt
 def post_resp(request):
+    """ test function """
     print("reuest:", request.POST)
     if len(request.POST) > 0 :
         POSTED_RESPONSES.insert(0, {'id': len(POSTED_RESPONSES),
@@ -63,29 +56,49 @@ def cmdstrind(request):
     ret = cmd_string()
     return HttpResponse(ret)
 
+
+@csrf_exempt
+def post_get_status(request):
+    """this ask every 10 sec from frontend """
+    js = json.loads(request.body)
+    docs = models.Dogovor.objects.filter(pk__in=js['list_id'])
+    ret = {}
+    for i in docs:
+        mt = LAST_REQUESTS.get(i.pk, datetime.datetime(2000, 1, 1, 0, 0))
+        t2 = datetime.datetime.now() - datetime.datetime(mt.year, mt.month, mt.day, mt.hour, mt.minute, mt.second)
+        #t = datetime.datetime.now() - datetime.datetime(i.last_change.year, i.last_change.month, i.last_change.day, i.last_change.hour, i.last_change.minute, i.last_change.second)
+        ret[i.pk] = {'r':i.result, 'c': i.command, 't': round(t2.total_seconds())}
+    return JsonResponse({'ret': ret})
+
 def ispolnenie(request, kod, sost):
-    """ path('ispolnenie/<str:kod>/<str:sost>/', views.ispolnenie) """
+    """ path('ispolnenie/<str:kod>/<str:sost>/', views.ispolnenie)
+    this runs when command is done, and we want to know results
+    """
+    global LAST_REQUESTS
     dogs = models.Dogovor.objects.filter(kod_open_close=kod)
-    if len(dogs) == 1:
-        dogs[0].result = sost
-        dogs[0].command = ''
-        dogs[0].last_change = datetime.datetime.now()
-        dogs[0].save()
-        return JsonResponse({'resp': f"OK {kod} / {sost} "})
+    if len(dogs) >= 1:
+        changed = False
+        if dogs[0].result != sost:
+            dogs[0].result = sost
+            changed = True
+        if dogs[0].command != '':
+            dogs[0].command = ''
+            changed = True
+
+        # dogs[0].last_change = datetime.datetime.now()
+        if changed:
+            dogs[0].save()
+        LAST_REQUESTS[dogs[0].pk] = datetime.datetime.now()
+        if len(dogs) == 1:
+            return JsonResponse({'resp': f"OK {kod} / {sost} "})
+        else:
+            return JsonResponse({'resp': f"to many  FOUND {kod} I got first"})
+
     if len(dogs) == 0:
         return JsonResponse({'resp': f"NOT FOUND {kod} / {sost} "})
-        print(kod, "not found")
-    if len(dogs) > 1:
-        dogs[0].result = sost
-        dogs[0].command = ''
-        dogs[0].last_change = datetime.datetime.now()
-        dogs[0].save()
-        return JsonResponse({'resp': f"to many  FOUND {kod} I got first"})
-        print(kod, "to many found")
 
 
 def setcommand(request, id, cmd):
-    print(request)
     if not request.user.is_authenticated:
         return JsonResponse({'resp': f"No login"})
     d = models.Dogovor.objects.get(pk=id)
@@ -110,7 +123,6 @@ def get_client_ip(request):
 def show_table(request):
     if not request.user.is_authenticated:
         return redirect("/admin/login/?next=/show_table/")
-    print("IP: ", get_client_ip(request))
     q = models.Dogovor.objects.all()
     if 'id' in request.GET and request.GET['id'] != '':
         q = q.filter(dog_id__iexact=request.GET['id'])
@@ -129,11 +141,13 @@ def show_table(request):
 
     dogovors = q[:100]
     list_id = []
+    list_dogs = []
     for dog in dogovors:
         list_id.append(int(dog.pk))
+        list_dogs.append(dog)
 
     c = cmd_string()
-    return render(request, 'tds/table.html', {'dogovors': dogovors,
+    return render(request, 'tds/table.html', {'dogovors': list_dogs,
                                               'request': request,
                                               'RGET':request.GET,
                                               'cmd_string':c,
@@ -150,12 +164,6 @@ def delete_docs(request):
 
     #models.Dogovor.objects.all().delete()
     return redirect("/")
-
-def one(request):
-    if not request.user.is_authenticated:
-        return redirect("/admin/login/?next=/one/")
-    response = "one"
-    return HttpResponse(response)
 
 def load_docs(request):
     if not request.user.is_authenticated:

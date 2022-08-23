@@ -99,7 +99,7 @@ async function postData(url = '', data = {}) {
       </tr>
         </form>
 
-{% for dogovor in dogovors.all %}
+{% for dogovor in dogovors %}
 
         <tr>
             <td><a href="/admin/tds/dogovor/{{dogovor.id}}/change/" target="_blank"/> {{ dogovor.dog_id }}</a> </td>
